@@ -85,11 +85,17 @@ run() {
 # output: NONE, fails if not OK
 #
 verifySHA1() {
+  PLATFORM=$(uname -s)
   CURRENT_DIR=$(pwd)
   DIR_NAME=$(dirname "${1}")
   FILE_NAME=$(basename "${1}")
+  if [[ "$PLATFORM" == "Darwin" ]]; then
+    SHA1SUM="shasum"
+  else
+    SHA1SUM="sha1sum"
+  fi
   run cd "${DIR_NAME}"
-  run sha1sum --status -c "${FILE_NAME}.sha1"
+  run "$SHA1SUM" --status -c "${FILE_NAME}.sha1"
   run cd "${CURRENT_DIR}"
 }
 
